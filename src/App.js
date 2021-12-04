@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
+import { addTodo } from './actions/todo'
+
 
 class App extends Component {
-
+// this local state makes the App component a CONTROLLED component
+// also check the value attribute <value={this.state.todo}/> in the input tag below 
   state = {
     todo: ''
   }
+
+  
 
   handleOnChange = event => {
     this.setState({
@@ -17,7 +22,7 @@ class App extends Component {
   handleOnSubmit = event => {
     event.preventDefault();
     console.log("Todo being added: ", this.state.todo);
-    this.props.dispatch({ type: 'ADD_TODO', todo: this.state.todo });
+    this.props.addTodo(this.state.todo);
     this.setState({ todo: '' });
   }
 
@@ -47,4 +52,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+    return {
+      addTodo: (todo) => {
+        dispatch(addTodo(todo))
+      }
+    }
+}
+
+// below code enables us to access `this.props.todos` in our render method
+export default connect(mapStateToProps, mapDispatchToProps)(App);
